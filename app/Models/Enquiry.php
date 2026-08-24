@@ -15,6 +15,9 @@ class Enquiry extends Model
         'message',
     ];
 
+    /**
+     * @return BelongsTo<Accommodation, $this>
+     */
     public function accommodation(): BelongsTo
     {
         return $this->belongsTo(Accommodation::class);

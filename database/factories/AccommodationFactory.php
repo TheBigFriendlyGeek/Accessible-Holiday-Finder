@@ -18,8 +18,8 @@ class AccommodationFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->company() . ' Retreat',
-            'location' => fake()->city() . ', UK',
+            'name' => fake()->company().' Retreat',
+            'location' => fake()->city().', UK',
             'description' => fake()->paragraph(3),
             'image' => null,
             'wheelchair_accessible' => fake()->boolean(75),

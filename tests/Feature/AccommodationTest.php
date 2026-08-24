@@ -21,8 +21,7 @@ class AccommodationTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertInertia(
-            fn($page) =>
-            $page
+            fn ($page) => $page
                 ->component('accommodations/index')
                 ->has('accommodations', 3)
         );
@@ -51,8 +50,7 @@ class AccommodationTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertInertia(
-            fn($page) =>
-            $page
+            fn ($page) => $page
                 ->component('accommodations/index')
                 ->has('accommodations', 1)
                 ->where('accommodations.0.name', 'Coastal Escape')

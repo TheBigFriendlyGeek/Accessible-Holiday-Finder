@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Accommodation;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 
 class AccommodationController extends Controller
 {

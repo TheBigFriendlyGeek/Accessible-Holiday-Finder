@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { router, useForm, usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 
 type Accommodation = {
     id: number;
@@ -60,10 +60,7 @@ export default function Index({ accommodations, filters }: Props) {
         return () => window.clearTimeout(timeout);
     }, [searchTerm, filters]);
 
-    const updateFilter = (
-        filter: AccessibilityFilterKey,
-        checked: boolean,
-    ) => {
+    const updateFilter = (filter: AccessibilityFilterKey, checked: boolean) => {
         router.get(
             '/accommodations',
             {
@@ -115,7 +112,7 @@ export default function Index({ accommodations, filters }: Props) {
         <main className="min-h-screen bg-slate-50 px-6 py-12">
             <div className="mx-auto max-w-6xl">
                 <header className="mb-10">
-                    <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-teal-700">
+                    <p className="mb-2 text-sm font-semibold tracking-wide text-teal-700 uppercase">
                         Accessible Holiday Finder
                     </p>
 
@@ -124,7 +121,8 @@ export default function Index({ accommodations, filters }: Props) {
                     </h1>
 
                     <p className="mt-4 max-w-2xl text-lg text-slate-600">
-                        Find accessible places to stay with the facilities and features that matter to you.
+                        Find accessible places to stay with the facilities and
+                        features that matter to you.
                     </p>
                 </header>
 
@@ -133,11 +131,8 @@ export default function Index({ accommodations, filters }: Props) {
                     className="mb-10 rounded-2xl bg-white p-6 shadow-sm"
                 >
                     <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-
                         <div className="space-y-6">
-
                             <div className="w-full lg:max-w-md">
-
                                 <label
                                     htmlFor="accommodation-search"
                                     className="block text-sm font-semibold text-slate-900"
@@ -149,18 +144,20 @@ export default function Index({ accommodations, filters }: Props) {
                                     id="accommodation-search"
                                     type="search"
                                     value={searchTerm}
-                                    onChange={(event) => setSearchTerm(event.target.value)}
+                                    onChange={(event) =>
+                                        setSearchTerm(event.target.value)
+                                    }
                                     placeholder="Try Coastal, Cornwall or Wheelchair"
                                     className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3"
                                 />
 
                                 <p className="mt-2 text-sm text-slate-500">
-                                    Search by property, location, description or accessibility feature.
+                                    Search by property, location, description or
+                                    accessibility feature.
                                 </p>
                             </div>
 
                             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-
                                 <fieldset>
                                     <legend
                                         id="accessibility-filters-heading"
@@ -173,7 +170,9 @@ export default function Index({ accommodations, filters }: Props) {
                                         <label className="flex cursor-pointer items-center gap-2">
                                             <input
                                                 type="checkbox"
-                                                checked={filters.wheelchair_accessible}
+                                                checked={
+                                                    filters.wheelchair_accessible
+                                                }
                                                 onChange={(event) =>
                                                     updateFilter(
                                                         'wheelchair_accessible',
@@ -188,7 +187,9 @@ export default function Index({ accommodations, filters }: Props) {
                                         <label className="flex cursor-pointer items-center gap-2">
                                             <input
                                                 type="checkbox"
-                                                checked={filters.step_free_access}
+                                                checked={
+                                                    filters.step_free_access
+                                                }
                                                 onChange={(event) =>
                                                     updateFilter(
                                                         'step_free_access',
@@ -218,7 +219,9 @@ export default function Index({ accommodations, filters }: Props) {
                                         <label className="flex cursor-pointer items-center gap-2">
                                             <input
                                                 type="checkbox"
-                                                checked={filters.hoist_available}
+                                                checked={
+                                                    filters.hoist_available
+                                                }
                                                 onChange={(event) =>
                                                     updateFilter(
                                                         'hoist_available',
@@ -239,11 +242,8 @@ export default function Index({ accommodations, filters }: Props) {
                                 >
                                     Clear filters
                                 </button>
-
                             </div>
-
                         </div>
-
                     </div>
 
                     <p
@@ -251,7 +251,10 @@ export default function Index({ accommodations, filters }: Props) {
                         aria-live="polite"
                     >
                         {accommodations.length}{' '}
-                        {accommodations.length === 1 ? 'property' : 'properties'} found
+                        {accommodations.length === 1
+                            ? 'property'
+                            : 'properties'}{' '}
+                        found
                     </p>
                 </section>
 
@@ -282,9 +285,7 @@ export default function Index({ accommodations, filters }: Props) {
                                     <li>✓ Step-free access</li>
                                 )}
 
-                                {accommodation.wet_room && (
-                                    <li>✓ Wet room</li>
-                                )}
+                                {accommodation.wet_room && <li>✓ Wet room</li>}
 
                                 {accommodation.hoist_available && (
                                     <li>✓ Hoist available</li>
@@ -305,7 +306,7 @@ export default function Index({ accommodations, filters }: Props) {
 
                 <section className="mt-16 rounded-2xl bg-white p-8 shadow-sm">
                     <div className="max-w-2xl">
-                        <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-teal-700">
+                        <p className="mb-2 text-sm font-semibold tracking-wide text-teal-700 uppercase">
                             Make an enquiry
                         </p>
 
@@ -314,8 +315,8 @@ export default function Index({ accommodations, filters }: Props) {
                         </h2>
 
                         <p className="mt-3 text-slate-600">
-                            Send us your details and accessibility requirements and we'll get
-                            back to you.
+                            Send us your details and accessibility requirements
+                            and we'll get back to you.
                         </p>
 
                         <form
@@ -342,7 +343,9 @@ export default function Index({ accommodations, filters }: Props) {
                                     }
                                     className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3"
                                 >
-                                    <option value="">Choose an accommodation</option>
+                                    <option value="">
+                                        Choose an accommodation
+                                    </option>
 
                                     {accommodations.map((accommodation) => (
                                         <option
@@ -374,7 +377,10 @@ export default function Index({ accommodations, filters }: Props) {
                                     type="text"
                                     value={enquiryForm.data.name}
                                     onChange={(event) =>
-                                        enquiryForm.setData('name', event.target.value)
+                                        enquiryForm.setData(
+                                            'name',
+                                            event.target.value,
+                                        )
                                     }
                                     className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
                                 />
@@ -399,7 +405,10 @@ export default function Index({ accommodations, filters }: Props) {
                                     type="email"
                                     value={enquiryForm.data.email}
                                     onChange={(event) =>
-                                        enquiryForm.setData('email', event.target.value)
+                                        enquiryForm.setData(
+                                            'email',
+                                            event.target.value,
+                                        )
                                     }
                                     className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
                                 />
@@ -427,7 +436,10 @@ export default function Index({ accommodations, filters }: Props) {
                                     type="tel"
                                     value={enquiryForm.data.phone}
                                     onChange={(event) =>
-                                        enquiryForm.setData('phone', event.target.value)
+                                        enquiryForm.setData(
+                                            'phone',
+                                            event.target.value,
+                                        )
                                     }
                                     className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
                                 />
@@ -452,7 +464,10 @@ export default function Index({ accommodations, filters }: Props) {
                                     rows={5}
                                     value={enquiryForm.data.message}
                                     onChange={(event) =>
-                                        enquiryForm.setData('message', event.target.value)
+                                        enquiryForm.setData(
+                                            'message',
+                                            event.target.value,
+                                        )
                                     }
                                     className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
                                 />
@@ -476,7 +491,6 @@ export default function Index({ accommodations, filters }: Props) {
                         </form>
                     </div>
                 </section>
-
             </div>
         </main>
     );

@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Database\Factories\AccommodationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Accommodation extends Model
 {
+    /** @use HasFactory<AccommodationFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -31,6 +33,9 @@ class Accommodation extends Model
         ];
     }
 
+    /**
+     * @return HasMany<Enquiry, $this>
+     */
     public function enquiries(): HasMany
     {
         return $this->hasMany(Enquiry::class);
