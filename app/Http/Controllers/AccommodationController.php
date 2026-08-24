@@ -6,6 +6,7 @@ use App\Models\Accommodation;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class AccommodationController extends Controller
 {
@@ -41,6 +42,17 @@ class AccommodationController extends Controller
                 'wet_room' => $request->boolean('wet_room'),
                 'hoist_available' => $request->boolean('hoist_available'),
             ],
+        ]);
+    }
+
+    public function apiIndex(): JsonResponse
+    {
+        $accommodations = Accommodation::query()
+            ->orderBy('name')
+            ->get();
+
+        return response()->json([
+            'data' => $accommodations,
         ]);
     }
 }
