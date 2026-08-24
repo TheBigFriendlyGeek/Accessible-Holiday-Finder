@@ -120,12 +120,11 @@ export default function Index({ accommodations, filters }: Props) {
                     </p>
 
                     <h1 className="text-4xl font-bold text-slate-900">
-                        Find your next accessible stay
+                        A holiday that works for you
                     </h1>
 
                     <p className="mt-4 max-w-2xl text-lg text-slate-600">
-                        Browse accommodation with accessibility features that
-                        match your requirements.
+                        Find accessible places to stay with the facilities and features that matter to you.
                     </p>
                 </header>
 
