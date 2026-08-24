@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { router, useForm, usePage } from '@inertiajs/react';
 
 type Accommodation = {
@@ -13,6 +14,7 @@ type Accommodation = {
 };
 
 type Filters = {
+    search: string;
     wheelchair_accessible: boolean;
     step_free_access: boolean;
     wet_room: boolean;
@@ -30,10 +32,38 @@ type FlashProps = {
     };
 };
 
-type FilterKey = keyof Filters;
+type AccessibilityFilterKey = Exclude<keyof Filters, 'search'>;
 
 export default function Index({ accommodations, filters }: Props) {
-    const updateFilter = (filter: FilterKey, checked: boolean) => {
+    const [searchTerm, setSearchTerm] = useState(filters.search ?? '');
+
+    useEffect(() => {
+        if (searchTerm === filters.search) {
+            return;
+        }
+
+        const timeout = window.setTimeout(() => {
+            router.get(
+                '/accommodations',
+                {
+                    ...filters,
+                    search: searchTerm || undefined,
+                },
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    replace: true,
+                },
+            );
+        }, 300);
+
+        return () => window.clearTimeout(timeout);
+    }, [searchTerm, filters]);
+
+    const updateFilter = (
+        filter: AccessibilityFilterKey,
+        checked: boolean,
+    ) => {
         router.get(
             '/accommodations',
             {
@@ -49,6 +79,8 @@ export default function Index({ accommodations, filters }: Props) {
     };
 
     const resetFilters = () => {
+        setSearchTerm('');
+
         router.get(
             '/accommodations',
             {},
@@ -102,84 +134,117 @@ export default function Index({ accommodations, filters }: Props) {
                     className="mb-10 rounded-2xl bg-white p-6 shadow-sm"
                 >
                     <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                        <fieldset>
-                            <legend
-                                id="accessibility-filters-heading"
-                                className="text-lg font-semibold text-slate-900"
-                            >
-                                Accessibility requirements
-                            </legend>
 
-                            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
-                                <label className="flex cursor-pointer items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={filters.wheelchair_accessible}
-                                        onChange={(event) =>
-                                            updateFilter(
-                                                'wheelchair_accessible',
-                                                event.target.checked,
-                                            )
-                                        }
-                                        className="size-4"
-                                    />
-                                    <span>Wheelchair accessible</span>
+                        <div className="space-y-6">
+
+                            <div className="w-full lg:max-w-md">
+
+                                <label
+                                    htmlFor="accommodation-search"
+                                    className="block text-sm font-semibold text-slate-900"
+                                >
+                                    Search accommodation
                                 </label>
 
-                                <label className="flex cursor-pointer items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={filters.step_free_access}
-                                        onChange={(event) =>
-                                            updateFilter(
-                                                'step_free_access',
-                                                event.target.checked,
-                                            )
-                                        }
-                                        className="size-4"
-                                    />
-                                    <span>Step-free access</span>
-                                </label>
+                                <input
+                                    id="accommodation-search"
+                                    type="search"
+                                    value={searchTerm}
+                                    onChange={(event) => setSearchTerm(event.target.value)}
+                                    placeholder="Try Coastal, Cornwall or Wheelchair"
+                                    className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3"
+                                />
 
-                                <label className="flex cursor-pointer items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={filters.wet_room}
-                                        onChange={(event) =>
-                                            updateFilter(
-                                                'wet_room',
-                                                event.target.checked,
-                                            )
-                                        }
-                                        className="size-4"
-                                    />
-                                    <span>Wet room</span>
-                                </label>
-
-                                <label className="flex cursor-pointer items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={filters.hoist_available}
-                                        onChange={(event) =>
-                                            updateFilter(
-                                                'hoist_available',
-                                                event.target.checked,
-                                            )
-                                        }
-                                        className="size-4"
-                                    />
-                                    <span>Hoist available</span>
-                                </label>
+                                <p className="mt-2 text-sm text-slate-500">
+                                    Search by property, location, description or accessibility feature.
+                                </p>
                             </div>
-                        </fieldset>
 
-                        <button
-                            type="button"
-                            onClick={resetFilters}
-                            className="self-start text-sm font-semibold text-teal-700 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700 lg:self-auto"
-                        >
-                            Clear filters
-                        </button>
+                            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+
+                                <fieldset>
+                                    <legend
+                                        id="accessibility-filters-heading"
+                                        className="text-lg font-semibold text-slate-900"
+                                    >
+                                        Accessibility requirements
+                                    </legend>
+
+                                    <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+                                        <label className="flex cursor-pointer items-center gap-2">
+                                            <input
+                                                type="checkbox"
+                                                checked={filters.wheelchair_accessible}
+                                                onChange={(event) =>
+                                                    updateFilter(
+                                                        'wheelchair_accessible',
+                                                        event.target.checked,
+                                                    )
+                                                }
+                                                className="size-4"
+                                            />
+                                            <span>Wheelchair accessible</span>
+                                        </label>
+
+                                        <label className="flex cursor-pointer items-center gap-2">
+                                            <input
+                                                type="checkbox"
+                                                checked={filters.step_free_access}
+                                                onChange={(event) =>
+                                                    updateFilter(
+                                                        'step_free_access',
+                                                        event.target.checked,
+                                                    )
+                                                }
+                                                className="size-4"
+                                            />
+                                            <span>Step-free access</span>
+                                        </label>
+
+                                        <label className="flex cursor-pointer items-center gap-2">
+                                            <input
+                                                type="checkbox"
+                                                checked={filters.wet_room}
+                                                onChange={(event) =>
+                                                    updateFilter(
+                                                        'wet_room',
+                                                        event.target.checked,
+                                                    )
+                                                }
+                                                className="size-4"
+                                            />
+                                            <span>Wet room</span>
+                                        </label>
+
+                                        <label className="flex cursor-pointer items-center gap-2">
+                                            <input
+                                                type="checkbox"
+                                                checked={filters.hoist_available}
+                                                onChange={(event) =>
+                                                    updateFilter(
+                                                        'hoist_available',
+                                                        event.target.checked,
+                                                    )
+                                                }
+                                                className="size-4"
+                                            />
+                                            <span>Hoist available</span>
+                                        </label>
+                                    </div>
+                                </fieldset>
+
+                                <button
+                                    type="button"
+                                    onClick={resetFilters}
+                                    className="self-start text-sm font-semibold text-teal-700 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700 lg:self-auto"
+                                >
+                                    Clear filters
+                                </button>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
                     <p

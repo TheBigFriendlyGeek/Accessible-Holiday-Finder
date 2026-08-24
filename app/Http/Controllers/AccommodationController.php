@@ -14,6 +14,41 @@ class AccommodationController extends Controller
     {
         $query = Accommodation::query();
 
+        $search = trim((string) $request->input('search', ''));
+
+        if ($search !== '') {
+            $normalizedSearch = strtolower($search);
+
+            $query->where(function ($searchQuery) use ($search, $normalizedSearch) {
+                $searchQuery
+                    ->whereLike('name', "%{$search}%")
+                    ->orWhereLike('location', "%{$search}%")
+                    ->orWhereLike('description', "%{$search}%");
+
+                if (str_contains($normalizedSearch, 'wheelchair')) {
+                    $searchQuery->orWhere('wheelchair_accessible', true);
+                }
+
+                if (
+                    str_contains($normalizedSearch, 'step-free') ||
+                    str_contains($normalizedSearch, 'step free')
+                ) {
+                    $searchQuery->orWhere('step_free_access', true);
+                }
+
+                if (
+                    str_contains($normalizedSearch, 'wet room') ||
+                    str_contains($normalizedSearch, 'wetroom')
+                ) {
+                    $searchQuery->orWhere('wet_room', true);
+                }
+
+                if (str_contains($normalizedSearch, 'hoist')) {
+                    $searchQuery->orWhere('hoist_available', true);
+                }
+            });
+        }
+
         if ($request->boolean('wheelchair_accessible')) {
             $query->where('wheelchair_accessible', true);
         }
@@ -37,6 +72,7 @@ class AccommodationController extends Controller
         return Inertia::render('accommodations/index', [
             'accommodations' => $accommodations,
             'filters' => [
+                'search' => $search,
                 'wheelchair_accessible' => $request->boolean('wheelchair_accessible'),
                 'step_free_access' => $request->boolean('step_free_access'),
                 'wet_room' => $request->boolean('wet_room'),
