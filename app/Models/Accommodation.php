@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Accommodation extends Model
 {
@@ -28,5 +29,10 @@ class Accommodation extends Model
             'wet_room' => 'boolean',
             'hoist_available' => 'boolean',
         ];
+    }
+
+    public function enquiries(): HasMany
+    {
+        return $this->hasMany(Enquiry::class);
     }
 }

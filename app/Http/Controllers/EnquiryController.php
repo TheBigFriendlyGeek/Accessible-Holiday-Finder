@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\StoreEnquiryRequest;
+use App\Models\Enquiry;
+use Illuminate\Http\RedirectResponse;
+
+class EnquiryController extends Controller
+{
+    public function store(StoreEnquiryRequest $request): RedirectResponse
+    {
+        Enquiry::create($request->validated());
+
+        return back()->with(
+            'success',
+            'Thanks! Your enquiry has been submitted.'
+        );
+    }
+}

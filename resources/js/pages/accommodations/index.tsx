@@ -1,4 +1,4 @@
-import { router } from '@inertiajs/react';
+import { router, useForm, usePage } from '@inertiajs/react';
 
 type Accommodation = {
     id: number;
@@ -22,6 +22,12 @@ type Filters = {
 type Props = {
     accommodations: Accommodation[];
     filters: Filters;
+};
+
+type FlashProps = {
+    flash: {
+        success?: string;
+    };
 };
 
 type FilterKey = keyof Filters;
@@ -53,6 +59,25 @@ export default function Index({ accommodations, filters }: Props) {
             },
         );
     };
+
+    const enquiryForm = useForm({
+        accommodation_id: '',
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+    });
+
+    const submitEnquiry = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        enquiryForm.post('/enquiries', {
+            preserveScroll: true,
+            onSuccess: () => enquiryForm.reset(),
+        });
+    };
+
+    const { flash } = usePage<FlashProps>().props;
 
     return (
         <main className="min-h-screen bg-slate-50 px-6 py-12">
@@ -204,6 +229,190 @@ export default function Index({ accommodations, filters }: Props) {
                         </article>
                     ))}
                 </div>
+
+                {flash.success && (
+                    <div
+                        role="status"
+                        className="mb-6 rounded-lg bg-emerald-50 px-4 py-3 text-emerald-800"
+                    >
+                        {flash.success}
+                    </div>
+                )}
+
+                <section className="mt-16 rounded-2xl bg-white p-8 shadow-sm">
+                    <div className="max-w-2xl">
+                        <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-teal-700">
+                            Make an enquiry
+                        </p>
+
+                        <h2 className="text-3xl font-bold text-slate-900">
+                            Interested in one of these stays?
+                        </h2>
+
+                        <p className="mt-3 text-slate-600">
+                            Send us your details and accessibility requirements and we'll get
+                            back to you.
+                        </p>
+
+                        <form
+                            onSubmit={submitEnquiry}
+                            className="mt-8 space-y-6"
+                            noValidate
+                        >
+                            <div>
+                                <label
+                                    htmlFor="accommodation_id"
+                                    className="block text-sm font-semibold text-slate-900"
+                                >
+                                    Accommodation
+                                </label>
+
+                                <select
+                                    id="accommodation_id"
+                                    value={enquiryForm.data.accommodation_id}
+                                    onChange={(event) =>
+                                        enquiryForm.setData(
+                                            'accommodation_id',
+                                            event.target.value,
+                                        )
+                                    }
+                                    className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3"
+                                >
+                                    <option value="">Choose an accommodation</option>
+
+                                    {accommodations.map((accommodation) => (
+                                        <option
+                                            key={accommodation.id}
+                                            value={accommodation.id}
+                                        >
+                                            {accommodation.name}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                {enquiryForm.errors.accommodation_id && (
+                                    <p className="mt-2 text-sm text-red-700">
+                                        {enquiryForm.errors.accommodation_id}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div>
+                                <label
+                                    htmlFor="name"
+                                    className="block text-sm font-semibold text-slate-900"
+                                >
+                                    Name
+                                </label>
+
+                                <input
+                                    id="name"
+                                    type="text"
+                                    value={enquiryForm.data.name}
+                                    onChange={(event) =>
+                                        enquiryForm.setData('name', event.target.value)
+                                    }
+                                    className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
+                                />
+
+                                {enquiryForm.errors.name && (
+                                    <p className="mt-2 text-sm text-red-700">
+                                        {enquiryForm.errors.name}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div>
+                                <label
+                                    htmlFor="email"
+                                    className="block text-sm font-semibold text-slate-900"
+                                >
+                                    Email address
+                                </label>
+
+                                <input
+                                    id="email"
+                                    type="email"
+                                    value={enquiryForm.data.email}
+                                    onChange={(event) =>
+                                        enquiryForm.setData('email', event.target.value)
+                                    }
+                                    className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
+                                />
+
+                                {enquiryForm.errors.email && (
+                                    <p className="mt-2 text-sm text-red-700">
+                                        {enquiryForm.errors.email}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div>
+                                <label
+                                    htmlFor="phone"
+                                    className="block text-sm font-semibold text-slate-900"
+                                >
+                                    Phone
+                                    <span className="ml-1 font-normal text-slate-500">
+                                        (optional)
+                                    </span>
+                                </label>
+
+                                <input
+                                    id="phone"
+                                    type="tel"
+                                    value={enquiryForm.data.phone}
+                                    onChange={(event) =>
+                                        enquiryForm.setData('phone', event.target.value)
+                                    }
+                                    className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
+                                />
+
+                                {enquiryForm.errors.phone && (
+                                    <p className="mt-2 text-sm text-red-700">
+                                        {enquiryForm.errors.phone}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div>
+                                <label
+                                    htmlFor="message"
+                                    className="block text-sm font-semibold text-slate-900"
+                                >
+                                    Accessibility requirements or message
+                                </label>
+
+                                <textarea
+                                    id="message"
+                                    rows={5}
+                                    value={enquiryForm.data.message}
+                                    onChange={(event) =>
+                                        enquiryForm.setData('message', event.target.value)
+                                    }
+                                    className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3"
+                                />
+
+                                {enquiryForm.errors.message && (
+                                    <p className="mt-2 text-sm text-red-700">
+                                        {enquiryForm.errors.message}
+                                    </p>
+                                )}
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={enquiryForm.processing}
+                                className="rounded-lg bg-teal-700 px-6 py-3 font-semibold text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                                {enquiryForm.processing
+                                    ? 'Sending enquiry…'
+                                    : 'Send enquiry'}
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
             </div>
         </main>
     );
